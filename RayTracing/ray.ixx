@@ -1,7 +1,5 @@
-module;
-import math;
-
 export module ray;
+import math;
 
 export class Ray {
 public:
