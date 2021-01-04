@@ -16,7 +16,7 @@ import ray;
 // a = dot(rayDirection, rayDirection)
 // b = dot(rayDirection, rayOrigin - center)
 // c = dot(rayOrigin-center, rayOrigin - center) - r * r
-bool hitSphere(const Math::Vec3& center, float radius, const Ray& r)
+float hitSphere(const Math::Vec3& center, float radius, const Ray& r)
 {
 	Math::Vec3 oc = r.origin() - center;
 	Math::Vec3 direction = r.direction();
@@ -26,18 +26,26 @@ bool hitSphere(const Math::Vec3& center, float radius, const Ray& r)
 	float b = 2.0f * dot(direction, oc);
 	float c = dot(oc, oc) - radius * radius;
 	float dis = b * b - 4.0f * a * c;
-	return dis >= 0;
+	if (dis < 0) {
+		return -1.0f;
+	}
+	else {
+		return (-b - sqrt(dis)) / (2.0f * a);
+	}
 }
 
 Math::Vec3 color(const Ray& r)
 {
-	if (hitSphere(Math::Vec3(0.0f, 0.0f, -1.0f), 0.5f, r)) {
-		return Math::Vec3(1.0f, 0.0f, 0.0f);
+	float t = hitSphere(Math::Vec3(0.0f, 0.0f, -1.0f), 0.5f, r);
+	if (t > 0.0f) {
+		Math::Vec3 N = r.pointAtParameter(t) - Math::Vec3(0.0f, 0.0f, -1.0f);
+		N.normalize();
+		return 0.5 * Math::Vec3(N.x() + 1.0f, N.y() + 1.0f, N.z() + 1.0f);
 	}
 
 	Math::Vec3 direction = r.direction();
 	direction.normalize();
-	float t = 0.5f * (direction.y() + 1.0f);
+	t = 0.5f * (direction.y() + 1.0f);
 	return (1.0f - t) * Math::Vec3(1.0f, 1.0f, 1.0f) + t * Math::Vec3(0.5f, 0.7f, 1.0f);
 }
 
