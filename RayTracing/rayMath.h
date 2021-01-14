@@ -1,8 +1,7 @@
-module;
+#pragma once
 #include <math.h>
 
-export module math;
-export namespace Math {
+namespace Math {
 	class Vec3 {
 	public:
 		Vec3() = default;

@@ -18,10 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="math.ixx">
+    <ClCompile Include="ray.h">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ray.ixx">
+    <ClCompile Include="rayMath.h">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

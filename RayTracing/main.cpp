@@ -1,9 +1,8 @@
 #include <fstream>
 #include <windows.h>
 #include <wingdi.h>
-
-import math;
-import ray;
+#include "ray.h"
+#include "rayMath.h"
 
 // 判断射线是否与球相交
 // 射线上的点 f(t) = rayOrigin + t * rayDirection;
