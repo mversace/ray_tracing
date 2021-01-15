@@ -147,6 +147,10 @@
     <ClCompile Include="rayMath.h" />
     <ClCompile Include="ray.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sphere.h" />
+    <ClInclude Include="world.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
