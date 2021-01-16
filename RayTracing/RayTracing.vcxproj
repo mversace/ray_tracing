@@ -148,6 +148,7 @@
     <ClCompile Include="ray.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="world.h" />
   </ItemGroup>

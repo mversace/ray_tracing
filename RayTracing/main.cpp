@@ -1,7 +1,9 @@
 #include <fstream>
 #include <windows.h>
 #include <wingdi.h>
+#include <random>
 #include "world.h"
+#include "camera.h"
 
 Math::Vec3 color(const Ray& r, const World& world)
 {
@@ -44,27 +46,33 @@ void saveToBmp(int width, int height, void* pData)
 	}
 }
 
+inline float randF() {
+	return static_cast<float>(rand()) / RAND_MAX;
+}
+
 int main()
 {
-	constexpr auto width = 400;
-	constexpr auto height = 200;
-
-	Math::Vec3 lowerLeftCorner(-2.0f, -1.0f, -1.0f);
-	Math::Vec3 horizontal(4.0f, 0.0f, 0.0f);
-	Math::Vec3 vertical(0.0f, 2.0f, 0.0f);
-	Math::Vec3 origin(0.0f, 0.0f, 0.0f);
+	auto width = 800;
+	auto height = 400;
+	auto ns = 100;
 
 	World world;
 	world.addObject({ Math::Vec3(0.0f, 0.0f, -1.0f), 0.5f });
 	world.addObject({ Math::Vec3(0.0f, -100.5f, -1.0f), 100.0f });
 
+	Camera camera;
+
 	auto pData = std::make_shared<RGBTRIPLE[]>(width * height);
 	for (auto i = 0; i < height; ++i) {
 		for (auto j = 0; j < width; ++j) {
-			auto u = static_cast<float>(j) / static_cast<float>(width);
-			auto v = static_cast<float>(i) / static_cast<float>(height);
-			Ray r(origin, lowerLeftCorner + u * horizontal + v * vertical);
-			Math::Vec3 col = color(r, world);
+			Math::Vec3 col{ 0.0f, 0.0f, 0.0f };
+			for (auto k = 0; k < ns; ++k) {
+				auto u = static_cast<float>(j + randF()) / static_cast<float>(width);
+				auto v = static_cast<float>(i + randF()) / static_cast<float>(height);
+				auto r = camera.getRay(u, v);
+				col += color(r, world);
+			}
+			col /= float(ns);
 			auto idx = i * width + j;
 			pData[idx].rgbtRed = static_cast<unsigned char>(255.99 * col.x());
 			pData[idx].rgbtGreen = static_cast<unsigned char>(255.99 * col.y());
