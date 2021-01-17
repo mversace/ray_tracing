@@ -32,7 +32,6 @@ public:
 	{
 		Math::Vec3 oc = r.origin() - _center;
 		Math::Vec3 direction = r.direction();
-		direction.normalize();
 
 		float a = Math::dot(direction, direction);
 		float b = 2.0f * Math::dot(direction, oc);

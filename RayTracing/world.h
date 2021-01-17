@@ -15,7 +15,7 @@ public:
 
 	bool hit(const Ray& r, float fMin, float fMax, HitRec& rec) const
 	{
-		HitRec hitRecTemp;
+		HitRec hitRecTemp = { 0 };
 		bool isHit = false;
 		float fMaxTmp = fMax;
 		

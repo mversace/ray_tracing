@@ -2,20 +2,41 @@
 #include <windows.h>
 #include <wingdi.h>
 #include <random>
+#include <time.h>
 #include "world.h"
 #include "camera.h"
 
+
+inline float randF() {
+	return static_cast<float>(rand()) / RAND_MAX;
+}
+
+Math::Vec3 randomInUnitSphere() {
+	// 为了防止找到的点进入了内部
+
+	Math::Vec3 p;
+	do {
+		p = 2.0f * Math::Vec3(randF(), randF(), randF()) - Math::Vec3(1.0f, 1.0f, 1.0f);
+	} while (p.squaredLength() >= 1.0f);
+
+	return p;
+}
+
 Math::Vec3 color(const Ray& r, const World& world)
 {
-	HitRec rec;
-	if (world.hit(r, 0.0f, 1000.0f, rec)) {
-		auto N = rec.normal;
-		return 0.5 * Math::Vec3(N.x() + 1.0f, N.y() + 1.0f, N.z() + 1.0f);
+	HitRec rec = { 0 };
+	if (world.hit(r, 0.01f, 1000.0f, rec)) {
+		// 以入射点为中心 获取单位立方体中随机点
+		auto target = rec.p + rec.normal + randomInUnitSphere();
+		// 随机点减去入射点 获得随机反射出来的射线 继续参与颜色计算
+		return 0.5f * color(Ray(rec.p, target - rec.p), world);
 	}
 
 	Math::Vec3 direction = r.direction();
 	direction.normalize();
 	float t = 0.5f * (direction.y() + 1.0f);
+
+
 	return (1.0f - t) * Math::Vec3(1.0f, 1.0f, 1.0f) + t * Math::Vec3(0.5f, 0.7f, 1.0f);
 }
 
@@ -46,12 +67,10 @@ void saveToBmp(int width, int height, void* pData)
 	}
 }
 
-inline float randF() {
-	return static_cast<float>(rand()) / RAND_MAX;
-}
-
 int main()
 {
+	srand(time(nullptr));
+
 	auto width = 800;
 	auto height = 400;
 	auto ns = 100;

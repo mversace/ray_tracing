@@ -9,6 +9,7 @@ public:
 	{
 		A = a;
 		B = b;
+		B.normalize();
 	}
 
 	auto origin() const { return A; }

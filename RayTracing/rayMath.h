@@ -16,7 +16,8 @@ namespace Math {
 		inline float y() const { return e[1]; }
 		inline float z() const { return e[2]; }
 
-		inline float length() const { return static_cast<float>(sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2])); }
+		inline float squaredLength() const { return e[0] * e[0] + e[1] * e[1] + e[2] * e[2]; }
+		inline float length() const { return static_cast<float>(sqrt(squaredLength())); }
 		void normalize()
 		{
 			auto len = length();
